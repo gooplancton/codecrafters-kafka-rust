@@ -1,0 +1,8 @@
+[package]
+name = "kafka-protocol-serde"
+version = "0.1.0"
+edition = "2021"
+
+[dev-dependencies]
+kafka-protocol-serde-macros = { path = "../kafka-protocol-serde-macros/" }
+
