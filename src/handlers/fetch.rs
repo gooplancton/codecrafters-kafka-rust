@@ -82,12 +82,37 @@ pub struct FetchResponseBody {
     tag_buffer: TagBuffer,
 }
 
-pub fn handle_fetch(_header: RequestHeader, _body: FetchRequestBody) -> FetchResponseBody {
+pub fn handle_fetch(_header: RequestHeader, body: FetchRequestBody) -> FetchResponseBody {
+    let responses = body
+        .topics
+        .0
+        .into_iter()
+        .map(fetch_topic)
+        .collect::<Vec<_>>();
+
     FetchResponseBody {
-        throttle_time_ms: 3,
+        throttle_time_ms: 0,
         error_code: 0,
         session_id: 0,
-        responses: CompactArray(vec![]),
+        responses: CompactArray(responses),
         tag_buffer: TagBuffer,
+    }
+}
+
+fn fetch_topic(topic: Topic) -> Response {
+    Response {
+        tag_buffer: TagBuffer,
+        topic_id: topic.topic_id,
+        partitions: CompactArray(vec![ResTopicPartition {
+            error_code: 100,
+            partition_index: 0,
+            high_watermark: 0,
+            last_stable_offset: 0,
+            log_start_offset: 0,
+            aborted_transactions: CompactArray(vec![]),
+            preferred_read_replica: 0,
+            records: CompactRecords,
+            tag_buffer: TagBuffer,
+        }]),
     }
 }
