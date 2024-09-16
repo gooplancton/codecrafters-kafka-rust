@@ -20,7 +20,7 @@ impl KafkaSerialize for TagBuffer {
 
 impl KafkaSerialize for CompactRecords {
     fn kafka_byte_len(&self) -> usize {
-        4
+        1
     }
 
     fn kafka_serialize<W: std::io::prelude::Write>(
@@ -28,6 +28,6 @@ impl KafkaSerialize for CompactRecords {
         writer: &mut std::io::BufWriter<W>,
     ) -> std::io::Result<()> {
         // NOTE: not implemented in this codecrafters challenge
-        writer.write_all((-1i32).to_be_bytes().as_ref())
+        writer.write_all([0u8].as_slice())
     }
 }
